@@ -10,7 +10,7 @@ import androidx.room.PrimaryKey;
 public class UserM {
 
     @PrimaryKey(autoGenerate = true)
-    private String id;
+    private int id;
 
     @ColumnInfo(name = "fname")
     private String fname;
@@ -24,11 +24,11 @@ public class UserM {
     @ColumnInfo(name = "address")
     private String address;
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

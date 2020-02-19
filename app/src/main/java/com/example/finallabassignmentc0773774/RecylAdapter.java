@@ -1,5 +1,6 @@
 package com.example.finallabassignmentc0773774;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +31,8 @@ public class RecylAdapter extends RecyclerView.Adapter<RecylAdapter.listViewHold
     public void onBindViewHolder(@NonNull final listViewHolder holder, int position) {
         final UserM user = uList.get(position);
 
-        holder.idTV.setText(user.getId());
+        holder.idTV.setText(String.valueOf("id: "+user.getId()));
+        holder.nameTV.setText(String.valueOf("name: "+user.getFname()+" "+user.getLname()));
 
         holder.deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -44,6 +46,16 @@ public class RecylAdapter extends RecyclerView.Adapter<RecylAdapter.listViewHold
         holder.editBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                Intent vAct = new Intent(v.getContext(), DetailActivity.class);
+
+                vAct.putExtra("fname", user.getFname());
+                vAct.putExtra("lname", user.getLname());
+                vAct.putExtra("phone", user.getPhone());
+                vAct.putExtra("address", user.getAddress());
+                vAct.putExtra("editBool", false);
+
+                v.getContext().startActivity(vAct);
 
             }
         });
@@ -79,5 +91,7 @@ public class RecylAdapter extends RecyclerView.Adapter<RecylAdapter.listViewHold
         uList.addAll(userService.getAll());
         notifyDataSetChanged();
     }
+
+
 
 }

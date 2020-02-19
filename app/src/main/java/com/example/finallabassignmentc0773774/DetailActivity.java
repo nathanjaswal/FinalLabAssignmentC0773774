@@ -2,9 +2,12 @@ package com.example.finallabassignmentc0773774;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -24,6 +27,22 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
+
+        Intent intent = getIntent();
+
+        //
+        Boolean editB = intent.getBooleanExtra("editBool", false);
+        if (editB == true) {
+
+            fnameET.setText(intent.getStringExtra("fname"));
+            lnameET.setText(intent.getStringExtra("lname"));
+            phoneET.setText(intent.getStringExtra("phone"));
+            addressET.setText(intent.getStringExtra("address"));
+
+        }
+
+
+
         initView();
     }
 
@@ -34,7 +53,7 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                saveClicked();
+                saveClicked(v);
             }
         });
 
@@ -46,18 +65,20 @@ public class DetailActivity extends AppCompatActivity {
 
     }
 
-    private void saveClicked() {
+    private void saveClicked(View v) {
         Boolean chkV = checkValid();
         if (chkV == true){
-
+            saveToDB(v);
+        }else{
+            Toast.makeText(DetailActivity.this,
+                    "All Fields are required...", Toast.LENGTH_LONG).show();
         }
 
     }
 
     private boolean checkValid(){
         if(fnameET.getText().toString().isEmpty() || lnameET.getText().toString().isEmpty() || addressET.getText().toString().isEmpty() || phoneET.getText().toString().isEmpty()) {
-            Toast.makeText(DetailActivity.this,
-                    "All Fields are required...", Toast.LENGTH_LONG).show();
+
             return false;
         }
 
@@ -65,18 +86,30 @@ public class DetailActivity extends AppCompatActivity {
     }
 
 
-    private void saveToDB() {
-        UserM newUser = null;
+    private void saveToDB(View v) {
+        UserM newUser = new UserM(fnameET.getText().toString(), lnameET.getText().toString(), phoneET.getText().toString(), addressET.getText().toString());
 
-        newUser.setFname(fnameET.getText().toString());
-        newUser.setLname(lnameET.getText().toString());
-        newUser.setAddress(addressET.getText().toString());
-        newUser.setPhone(phoneET.getText().toString());
-
-        UserServiceImpl userService = new UserServiceImpl(getBaseContext());
+        UserServiceImpl userService = new UserServiceImpl(getApplicationContext());
 
         userService.insertAll(newUser);
 
+        hideKeyboard(this);
+
+        Intent intent = new Intent();
+        setResult(RESULT_OK, intent);
+        finish();
+
+    }
+
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
 
