@@ -27,6 +27,7 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
+        initView();
 
         Intent intent = getIntent();
 
@@ -34,16 +35,14 @@ public class DetailActivity extends AppCompatActivity {
         Boolean editB = intent.getBooleanExtra("editBool", false);
         if (editB == true) {
 
-            fnameET.setText(intent.getStringExtra("fname"));
-            lnameET.setText(intent.getStringExtra("lname"));
-            phoneET.setText(intent.getStringExtra("phone"));
-            addressET.setText(intent.getStringExtra("address"));
+            existUser = intent.getParcelableExtra("userm");
+            fnameET.setText(existUser.getFname());
+            lnameET.setText(existUser.getLname());
+            phoneET.setText(existUser.getPhone());
+            addressET.setText(existUser.getAddress());
 
         }
 
-
-
-        initView();
     }
 
     private void initView() {
@@ -87,15 +86,26 @@ public class DetailActivity extends AppCompatActivity {
 
 
     private void saveToDB(View v) {
-        UserM newUser = new UserM(fnameET.getText().toString(), lnameET.getText().toString(), phoneET.getText().toString(), addressET.getText().toString());
 
-        UserServiceImpl userService = new UserServiceImpl(getApplicationContext());
+        Intent intent = getIntent();
 
-        userService.insertAll(newUser);
+        Boolean editB = intent.getBooleanExtra("editBool", false);
+        if (editB == true) {
+            UserM newUser = new UserM(fnameET.getText().toString(), lnameET.getText().toString(), phoneET.getText().toString(), addressET.getText().toString());
+
+            UserServiceImpl userService = new UserServiceImpl(getApplicationContext());
+
+            userService.insertAll(newUser);
+        }else {
+            UserM newUser = new UserM(fnameET.getText().toString(), lnameET.getText().toString(), phoneET.getText().toString(), addressET.getText().toString());
+
+            UserServiceImpl userService = new UserServiceImpl(getApplicationContext());
+
+            userService.update(newUser);
+        }
 
         hideKeyboard(this);
 
-        Intent intent = new Intent();
         setResult(RESULT_OK, intent);
         finish();
 

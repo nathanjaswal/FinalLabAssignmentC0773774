@@ -6,6 +6,7 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import static androidx.room.OnConflictStrategy.REPLACE;
 
@@ -17,6 +18,9 @@ public interface UserDao {
 
     @Delete
     void delete(UserM user);
+
+    @Update
+    void update(UserM user);
 
     @Query("SELECT * from user_data")
     List<UserM> getUsers();

@@ -49,11 +49,12 @@ public class RecylAdapter extends RecyclerView.Adapter<RecylAdapter.listViewHold
 
                 Intent vAct = new Intent(v.getContext(), DetailActivity.class);
 
-                vAct.putExtra("fname", user.getFname());
-                vAct.putExtra("lname", user.getLname());
-                vAct.putExtra("phone", user.getPhone());
-                vAct.putExtra("address", user.getAddress());
-                vAct.putExtra("editBool", false);
+//                vAct.putExtra("fname", user.getFname());
+//                vAct.putExtra("lname", user.getLname());
+//                vAct.putExtra("phone", user.getPhone());
+//                vAct.putExtra("address", user.getAddress());
+                vAct.putExtra("userm", user);
+                vAct.putExtra("editBool", true);
 
                 v.getContext().startActivity(vAct);
 

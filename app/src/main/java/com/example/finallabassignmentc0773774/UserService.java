@@ -8,4 +8,6 @@ public interface UserService {
     void insertAll(UserM... users);
 
     void delete(UserM user);
+
+    void update(UserM user);
 }
